@@ -13,9 +13,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
-    "baseUrl": ".",
+    "types": ["chrome"],
+    "allowArbitraryExtensions": true,
     "paths": {
-      "@/*": ["src/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src"]
