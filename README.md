@@ -11,7 +11,7 @@
 
 AI Workflow Browser Extension — connects to a self-hosted [Ancroo Stack](https://github.com/ancroo/ancroo-stack) for the full feature set: speech-to-text, n8n automation, tool plugins, file uploads, and multi-user support.
 
-> **Phase 0 (Beta)** — The extension works end-to-end. The backend server runs without encryption or authentication by default — intended for local/trusted networks only. See the [Ancroo Roadmap](https://github.com/ancroo/ancroo/blob/main/ROADMAP.md) for the security path forward.
+> **Phase 0 (Beta)** — The extension is functional for local use. The backend server runs without encryption or authentication by default and is still under active development — intended for local/trusted networks only. See the [Ancroo Roadmap](https://github.com/ancroo/ancroo/blob/main/ROADMAP.md) for the security path forward.
 
 > **Note:** This extension is not published to the Chrome Web Store. Install manually (see below). For a standalone extension without a backend, use [Ancroo Web](https://github.com/ancroo/ancroo-web) instead.
 
