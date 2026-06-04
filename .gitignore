@@ -27,3 +27,4 @@ store/*.html
 
 # Claude Code
 .claude/
+CLAUDE.md

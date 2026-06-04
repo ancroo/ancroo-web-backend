@@ -7,7 +7,6 @@ import {
   isLoggedIn,
   isAuthRequired,
 } from "@/shared/auth";
-import { getConnectionMode } from "@/shared/connection-mode";
 import { executeWorkflowUnified } from "@/shared/executor";
 import { listWorkflowsUnified } from "@/shared/workflow-provider";
 import type {
@@ -40,12 +39,6 @@ import { FileUploadArea } from "./FileUploadArea";
 import { UploadProgressDisplay } from "./UploadProgressDisplay";
 import { SetupScreen } from "./SetupScreen";
 import { AboutPanel } from "./AboutPanel";
-import { WorkflowEditor } from "./WorkflowEditor";
-import { DirectModeSettings } from "./DirectModeSettings";
-import type { LocalWorkflow } from "@/shared/types";
-import type { ConnectionMode } from "@/shared/settings";
-import { saveLocalWorkflow, deleteLocalWorkflow } from "@/shared/local-workflows";
-import { saveSettings } from "@/shared/settings";
 
 export function App() {
   const [setupDone, setSetupDone] = useState<boolean | null>(null);
@@ -76,14 +69,6 @@ export function App() {
 
   // About panel state
   const [showAbout, setShowAbout] = useState(false);
-
-  // Direct mode state
-  const [connectionMode, setConnectionMode] = useState<ConnectionMode>("backend");
-  const [editingWorkflow, setEditingWorkflow] = useState<LocalWorkflow | null | "new">(null);
-  const [showDirectSettings, setShowDirectSettings] = useState(false);
-  const [llmProviders, setLlmProviders] = useState<import("@/shared/settings").LLMProviderConfig[]>(
-    [],
-  );
 
   // Result display state
   const [resultText, setResultText] = useState<string | null>(null);
@@ -157,27 +142,20 @@ export function App() {
       setNeedsLogin(false);
 
       const settings = await getSettings();
-      const mode = await getConnectionMode();
-      setConnectionMode(mode);
 
-      // In backend mode, check auth requirements
-      if (mode === "backend") {
-        const authRequired = await isAuthRequired(settings.backend_url);
-        setAuthEnabled(authRequired);
+      const authRequired = await isAuthRequired(settings.backend_url);
+      setAuthEnabled(authRequired);
 
-        if (authRequired) {
-          const loggedIn = await isLoggedIn();
-          if (!loggedIn) {
-            setNeedsLogin(true);
-            return;
-          }
+      if (authRequired) {
+        const loggedIn = await isLoggedIn();
+        if (!loggedIn) {
+          setNeedsLogin(true);
+          return;
         }
-      } else {
-        setAuthEnabled(false);
       }
 
       const [userInfo, workflowList, stored, session] = await Promise.all([
-        mode === "backend" ? getCurrentUser() : Promise.resolve(null),
+        getCurrentUser(),
         listWorkflowsUnified(),
         chrome.storage.local.get("history"),
         chrome.storage.session.get([
@@ -191,7 +169,6 @@ export function App() {
       setWorkflows(workflowList);
       setHistory((stored.history as HistoryEntry[] | undefined) ?? []);
       setMicDeviceId(settings.microphone_device_id);
-      if (mode === "direct") setLlmProviders(settings.llm_providers);
 
       // Cache workflows for background hotkey execution and refresh bindings
       await chrome.storage.session.set({ cachedWorkflows: workflowList });
@@ -780,50 +757,6 @@ export function App() {
     return <AboutPanel onClose={() => setShowAbout(false)} />;
   }
 
-  // Direct Mode: Workflow Editor
-  if (editingWorkflow !== null && connectionMode === "direct") {
-    const wf = editingWorkflow === "new" ? null : editingWorkflow;
-    return (
-      <WorkflowEditor
-        workflow={wf}
-        providers={llmProviders}
-        onSave={async (saved) => {
-          await saveLocalWorkflow(saved);
-          setEditingWorkflow(null);
-          await loadData();
-        }}
-        onDelete={
-          wf
-            ? async (slug) => {
-                await deleteLocalWorkflow(slug);
-                setEditingWorkflow(null);
-                await loadData();
-              }
-            : undefined
-        }
-        onCancel={() => setEditingWorkflow(null)}
-      />
-    );
-  }
-
-  // Direct Mode: Settings
-  if (showDirectSettings && connectionMode === "direct") {
-    return (
-      <DirectModeSettings
-        onClose={() => {
-          setShowDirectSettings(false);
-          loadData();
-        }}
-        onSwitchToBackend={async () => {
-          const current = await getSettings();
-          await saveSettings({ ...current, connection_mode: "backend" });
-          setShowDirectSettings(false);
-          setSetupDone(false);
-        }}
-      />
-    );
-  }
-
   // Result display — shown after successful file workflow execution
   if (resultText !== null) {
     return (
@@ -918,18 +851,8 @@ export function App() {
               <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10" />
             </svg>
           </button>
-          {connectionMode === "direct" && (
-            <button
-              onClick={() => setEditingWorkflow("new")}
-              class="text-xs text-blue-500 hover:text-blue-700"
-            >
-              + New
-            </button>
-          )}
           <button
-            onClick={() =>
-              connectionMode === "direct" ? setShowDirectSettings(true) : setSetupDone(false)
-            }
+            onClick={() => setSetupDone(false)}
             class="text-xs text-gray-400 hover:text-gray-600"
           >
             Settings
@@ -988,17 +911,6 @@ export function App() {
                             {isAudio && <span class="text-xs text-red-500">Voice</span>}
                             {isFile && <span class="text-xs text-purple-500">File upload</span>}
                             {isManual && <span class="text-xs text-teal-500">Manual input</span>}
-                            {connectionMode === "direct" && (
-                              <span
-                                class="text-xs text-gray-400 hover:text-gray-600 ml-auto"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setEditingWorkflow(workflow as LocalWorkflow);
-                                }}
-                              >
-                                Edit
-                              </span>
-                            )}
                           </div>
                           {isExecuting && !isFile && !isAudio && (
                             <div class="flex items-center gap-2 text-xs text-amber-600 mt-1">
