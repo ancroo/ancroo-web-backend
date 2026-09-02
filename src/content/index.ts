@@ -232,16 +232,11 @@ chrome.runtime.onMessage.addListener((message: ExtensionMessage, sender, sendRes
         if (!isAllowedSelector(field.selector)) continue;
         const el = document.querySelector(field.selector);
         if (el) {
-          if (
-            el instanceof HTMLInputElement &&
-            (el.type === "checkbox" || el.type === "radio")
-          ) {
+          if (el instanceof HTMLInputElement && (el.type === "checkbox" || el.type === "radio")) {
             // Collect all checked values for checkbox/radio groups with the same name
             const name = el.getAttribute("name");
             if (name) {
-              const checked = document.querySelectorAll(
-                `input[name='${name}']:checked`,
-              );
+              const checked = document.querySelectorAll(`input[name='${name}']:checked`);
               result[field.name] = Array.from(checked)
                 .map((cb) => (cb as HTMLInputElement).value)
                 .join(", ");
