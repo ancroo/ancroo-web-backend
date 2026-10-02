@@ -7,11 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0] — 2026-10-02
+
 ### Removed
 
 - Direct Mode (direct LLM provider calls, local workflow editor). The extension is now
   backend-only; for a standalone extension without a server use
   [Ancroo Web](https://github.com/ancroo/ancroo-web).
+- `declarativeNetRequest` permission, no longer needed without Direct Mode
+
+### Changed
+
+- Updated all dependencies (incl. @types/chrome 0.3, vite 8.3, eslint 10.11) and
+  raised the `brace-expansion` override to clear two high-severity advisories
 
 ## [0.3.0] — 2026-05-29
 
@@ -67,6 +75,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Execution history (last 50 entries)
 - OAuth2 PKCE authentication for multi-user backends
 
-[Unreleased]: https://github.com/ancroo/ancroo-web-backend/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/ancroo/ancroo-web-backend/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/ancroo/ancroo-web-backend/compare/v0.3.0...v0.4.0
+[0.3.0]: https://github.com/ancroo/ancroo-web-backend/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/ancroo/ancroo-web-backend/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/ancroo/ancroo-web-backend/releases/tag/v0.1.0
