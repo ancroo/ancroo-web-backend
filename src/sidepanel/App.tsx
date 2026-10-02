@@ -1,5 +1,10 @@
 import { useState, useEffect } from "preact/hooks";
-import { executeWorkflowWithFile, getCurrentUser } from "@/shared/api-client";
+import {
+  executeWorkflow,
+  executeWorkflowWithFile,
+  getCurrentUser,
+  listWorkflows,
+} from "@/shared/api-client";
 import { getSettings, isSetupComplete } from "@/shared/settings";
 import {
   login as authLogin,
@@ -7,8 +12,6 @@ import {
   isLoggedIn,
   isAuthRequired,
 } from "@/shared/auth";
-import { executeWorkflowUnified } from "@/shared/executor";
-import { listWorkflowsUnified } from "@/shared/workflow-provider";
 import type {
   Workflow,
   User,
@@ -156,7 +159,7 @@ export function App() {
 
       const [userInfo, workflowList, stored, session] = await Promise.all([
         getCurrentUser(),
-        listWorkflowsUnified(),
+        listWorkflows(),
         chrome.storage.local.get("history"),
         chrome.storage.session.get([
           "pendingRecording",
@@ -532,7 +535,7 @@ export function App() {
         };
       }
 
-      const result = await executeWorkflowUnified(workflow, inputData);
+      const result = await executeWorkflow(workflow.slug, inputData);
 
       const entry: HistoryEntry = {
         id: result.execution_id,

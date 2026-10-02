@@ -17,11 +17,9 @@ AI Workflow Browser Extension — connects to a self-hosted [Ancroo Stack](https
 
 ![Ancroo Admin Workflows and Sidepanel](ancroo-sidepanel.png)
 
-## Modes
+## How It Works
 
-### Backend Mode — Full feature set
-
-Connect to a self-hosted [Ancroo Stack](https://github.com/ancroo/ancroo-stack) for the complete experience: speech-to-text, n8n automation, tool plugins, file uploads, multi-user support, and server-managed workflows.
+The extension is a client for the [Ancroo Backend](https://github.com/ancroo/ancroo-backend), installed as part of a self-hosted [Ancroo Stack](https://github.com/ancroo/ancroo-stack). Workflows are managed centrally on the server; the extension lists them, collects the input and applies the result.
 
 ```mermaid
 %%{init: {'theme': 'neutral'}}%%
@@ -35,7 +33,7 @@ graph LR
     services["LLM / STT / n8n"]
 
     input <--> extension
-    extension <-- "Backend Mode" --> backend
+    extension <-- "REST API" --> backend
     backend <--> services
 
     style input fill:transparent,stroke:transparent,color:#1e3a5f
@@ -44,13 +42,7 @@ graph LR
     style services fill:#fed7aa,stroke:#f97316,color:#7c2d12
 ```
 
-### Direct Mode — No server needed
-
-Also supports direct LLM calls (OpenAI, Anthropic, Google Gemini, Ollama, OpenRouter) without a backend.
-
 ## Features
-
-### Both Modes
 
 - **Side panel UI** — browse and trigger workflows from a side panel (`Alt+Shift+Y` or click the extension icon)
 - **Text selection** — select text on any page, right-click "Run with Ancroo", and get AI-processed results
@@ -58,21 +50,11 @@ Also supports direct LLM calls (OpenAI, Anthropic, Google Gemini, Ollama, OpenRo
 - **Clipboard & page context** — workflows can access clipboard content and the current page URL/title
 - **Output actions** — results can replace selected text, copy to clipboard, insert before/after, or show in panel
 - **Execution history** — last 50 results are stored locally for quick access and re-use
-
-### Backend Mode
-
 - **Push-to-talk audio** — record speech directly in the browser and send it to a Whisper STT workflow
 - **File upload** — drag-and-drop or pick files to send to a workflow (with type and size validation)
 - **Tool integration** — connect workflows to n8n automations and Ancroo Runner plugins
 - **Multi-user** — OAuth2 PKCE authentication with per-user workflow permissions
 - **Server-managed workflows** — centralized workflow management via the admin UI
-
-### Direct Mode
-
-- **Multiple LLM providers** — OpenAI, Anthropic, Google Gemini, Ollama (local), OpenRouter, or any OpenAI-compatible endpoint
-- **Starter workflows** — six ready-to-use workflows created automatically
-- **Local workflow editor** — create and manage workflows with prompt templates, model selection, and input/output configuration
-- **Model browser** — auto-detects available models from your provider
 
 ## Install
 
@@ -100,8 +82,12 @@ Install the [Ancroo Stack](https://github.com/ancroo/ancroo-stack) with the Ancr
 
 ## Development
 
+For a local backend with hot reload, use the dev environment in
+[ancroo-backend](https://github.com/ancroo/ancroo-backend) (`./dev.sh up` — serves on
+`http://localhost:8900`, the extension's default). Then build and load the extension:
+
 ```bash
-pnpm dev
+pnpm build   # then reload the extension in chrome://extensions
 ```
 
 ## Project Structure
@@ -110,8 +96,7 @@ pnpm dev
 src/
 ├── background/    # Service worker (hotkeys, mic permission, side panel lifecycle)
 ├── content/       # Content script (text selection, insertion)
-├── shared/        # API client, auth, types, settings, LLM adapters, messages
-│   └── llm/       # LLM provider adapters (OpenAI, Anthropic, Gemini, Ollama)
+├── shared/        # API client, auth, hotkeys, types, settings, messages
 └── sidepanel/     # Side panel UI (Preact)
 ```
 
@@ -121,11 +106,11 @@ Contributions are welcome! Feel free to open an [issue](https://github.com/ancro
 
 ## Privacy
 
-See [Privacy Policy](PRIVACY_POLICY.md) — Ancroo collects no data. All settings, API keys, and history stay in your browser. Data is only sent to LLM providers or the backend you configure.
+See [Privacy Policy](PRIVACY_POLICY.md) — Ancroo collects no data. All settings and history stay in your browser. Data is only sent to the backend you configure.
 
 ## Security
 
-**API Keys:** API keys are stored in `chrome.storage.local`, which is sandboxed per extension and not accessible by websites or other extensions. Keys are only sent to the configured LLM provider. Note that the storage is not encrypted on disk — anyone with access to your browser profile can read them. This is standard practice for browser extensions.
+**Auth tokens:** OAuth2 session tokens are stored in `chrome.storage.local`, which is sandboxed per extension and not accessible by websites or other extensions. Tokens are only sent to the configured backend. Note that the storage is not encrypted on disk — anyone with access to your browser profile can read them. This is standard practice for browser extensions.
 
 To report a security vulnerability, please use [GitHub's private vulnerability reporting](https://github.com/ancroo/ancroo-web-backend/security/advisories/new) instead of opening a public issue.
 

@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Removed
+
+- Direct Mode (direct LLM provider calls, local workflow editor). The extension is now
+  backend-only; for a standalone extension without a server use
+  [Ancroo Web](https://github.com/ancroo/ancroo-web).
+
+## [0.3.0] — 2026-05-29
+
 ### Added
 
 - Direct Mode — use LLM APIs (OpenAI, Anthropic, Gemini, Ollama, OpenRouter) without a backend

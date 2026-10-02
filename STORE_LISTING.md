@@ -5,21 +5,15 @@
 ## Short Description
 
 ```
-AI Workflow Browser Extension with Backend Mode. Connects to a self-hosted Ancroo Stack for STT, n8n automation, file uploads, and multi-user support. Also supports direct LLM calls.
+AI Workflow Browser Extension for the self-hosted Ancroo Stack: LLM workflows, speech-to-text, n8n automation, file uploads, and multi-user support.
 ```
 
 ## Detailed Description
 
 ```
-Ancroo Web Backend lets you run AI workflows directly in your browser and connects to a self-hosted Ancroo Stack for the full feature set.
+Ancroo Web Backend runs AI workflows from your browser against a self-hosted Ancroo Stack: speech-to-text, n8n automation, tool plugins, file uploads, multi-user support, and server-managed workflows.
 
-TWO MODES — YOUR CHOICE
-
-Direct Mode — use your own API key:
-Connect to OpenAI, Anthropic, Google Gemini, Ollama, OpenRouter, or any OpenAI-compatible API. Add your API key and start using six built-in workflows: Summarize, Translate, Rewrite, Explain, Fix Grammar, and Ask AI. Create your own workflows with custom prompts and models.
-
-Backend Mode — self-hosted, full feature set:
-Connect to a self-hosted Ancroo Stack for speech-to-text, n8n automation, tool plugins, file uploads, multi-user support, and server-managed workflows.
+Looking for a standalone extension without a server? Use Ancroo Web (Chrome Web Store) instead.
 
 FEATURES
 
@@ -30,15 +24,6 @@ FEATURES
 - Output actions — replace text, copy to clipboard, insert before/after, or show in panel
 - Execution history — last 50 results stored locally
 
-DIRECT MODE
-
-- Multiple LLM providers — OpenAI, Anthropic, Google Gemini, Ollama, OpenRouter, or any OpenAI-compatible endpoint
-- Six starter workflows — ready to use out of the box
-- Local workflow editor — create workflows with prompt templates, model selection, and I/O config
-- Model browser — auto-detects available models from your provider
-
-BACKEND MODE
-
 - Push-to-talk audio — record speech and send it to a Whisper STT workflow
 - File upload — drag-and-drop files to send to a workflow
 - Tool integration — connect workflows to n8n automations and plugins
@@ -47,7 +32,7 @@ BACKEND MODE
 
 PRIVACY
 
-Ancroo collects no analytics, telemetry, or personal data. All settings and history stay in your browser. Data is only sent to LLM providers or backends you configure. See the Privacy Policy for details.
+Ancroo collects no analytics, telemetry, or personal data. All settings and history stay in your browser. Data is only sent to the backend you configure. See the Privacy Policy for details.
 
 OPEN SOURCE
 
