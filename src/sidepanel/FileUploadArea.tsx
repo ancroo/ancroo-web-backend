@@ -1,5 +1,5 @@
 import { useState, useRef } from "preact/hooks";
-import type { JSX } from "preact";
+import type { TargetedEvent } from "preact";
 import type { FileConfig } from "@/shared/types";
 import { formatFileSize } from "./utils";
 
@@ -38,7 +38,7 @@ export function FileUploadArea({
     setDragOver(false);
   }
 
-  function handleInputChange(e: JSX.TargetedEvent<HTMLInputElement>) {
+  function handleInputChange(e: TargetedEvent<HTMLInputElement>) {
     const f = (e.target as HTMLInputElement).files?.[0];
     if (f) {
       onFileSelect(f);
