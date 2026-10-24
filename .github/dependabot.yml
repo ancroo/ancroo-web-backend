@@ -9,3 +9,9 @@ updates:
     # at the default, a stalled queue silently blocks all further updates,
     # security ones included.
     open-pull-requests-limit: 10
+
+  # Keeps the SHA-pinned actions current.
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
