@@ -15,7 +15,7 @@ AI Workflow Browser Extension — connects to a self-hosted [Ancroo Stack](https
 
 > **Note:** This extension is not published to the Chrome Web Store. Install manually (see below). For a standalone extension without a backend, use [Ancroo Web](https://github.com/ancroo/ancroo-web) instead.
 
-![Ancroo Admin Workflows and Sidepanel](ancroo-sidepanel.png)
+![Ancroo Admin Workflows and Sidepanel](assets/screenshots/ancroo-sidepanel.png)
 
 ## How It Works
 
